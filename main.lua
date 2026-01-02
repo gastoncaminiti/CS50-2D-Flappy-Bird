@@ -20,7 +20,7 @@ function love.load()
     -- Configurar Filtro
     love.graphics.setDefaultFilter('linear', 'linear')
     -- Titulo de Ventana
-    love.window.setTitle('Clone Fifty Bird')
+    love.window.setTitle('Tappy Avion')
     -- Definir Sprites
     fondo = love.graphics.newImage('Sprites/fondo.png')
     piso  = love.graphics.newImage('Sprites/piso.png')
