@@ -5,8 +5,16 @@ push = require "push"
 VENTANA_ANCHO = 1280
 VENTANA_ALTO  = 720
 -- Definir Resolucion Virtual
-VIRTUAL_ANCHO = 800 
-VIRTUAL_ALTO  = 480
+VIRTUAL_ANCHO = 768
+VIRTUAL_ALTO  = 432
+
+-- Configuracion Parallax
+posicionFondo = 0
+posicionPiso = 0
+VELOCIDAD_FONDO = 60
+VELOCIDAD_PISO  = 120
+LOOP_FONDO = 800
+LOOP_PISO  = 808
 
 function love.load()
     -- Configurar Filtro
@@ -38,11 +46,17 @@ function love.keypressed(key)
     end
 end
 
+function love.update(dt)
+    -- Calculo de posicion de fondo y piso
+    posicionFondo = (posicionFondo + VELOCIDAD_FONDO * dt) % LOOP_FONDO
+    posicionPiso  = (posicionPiso  +  VELOCIDAD_PISO * dt) % LOOP_PISO
+end
+
 function love.draw()
     push:start()
     -- Dibujar fondo
-    love.graphics.draw(fondo, 0, 0)
+    love.graphics.draw(fondo, -posicionFondo, 0)
     -- Dibujar piso
-    love.graphics.draw(piso, 0, VIRTUAL_ALTO - 71)
+    love.graphics.draw(piso,  -posicionPiso, VIRTUAL_ALTO - 36)
     push:finish()
 end
