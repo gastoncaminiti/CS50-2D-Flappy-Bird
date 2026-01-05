@@ -38,6 +38,8 @@ function love.load()
         resizable = true,
         vsync = true
     })
+    -- Tabla de teclas presionadas
+    love.keyboard.keysPressed = {}
 end
 
 function love.resize(w, h)
@@ -45,8 +47,19 @@ function love.resize(w, h)
 end
 
 function love.keypressed(key)
+    -- Registrar tecla presionada en Tabla
+    love.keyboard.keysPressed[key] = true
+
     if key == 'escape' then
         love.event.quit()
+    end
+end
+-- Funcion para determinar si una tecla esta presionada
+function love.keyboard.wasPressed(key)
+    if love.keyboard.keysPressed[key] then
+        return true
+    else
+        return false
     end
 end
 
@@ -56,6 +69,8 @@ function love.update(dt)
     posicionPiso  = (posicionPiso  +  VELOCIDAD_PISO * dt) % LOOP_PISO
     -- Actualizar Avion
     avion:update(dt)
+    -- Reiniciar teclas presionadas en cada frame
+    love.keyboard.keysPressed = {}
 end
 
 function love.draw()

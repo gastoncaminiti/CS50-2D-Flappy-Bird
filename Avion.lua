@@ -1,6 +1,6 @@
 Avion = Class{}
 
-local GRAVITY = 980
+local GRAVITY = 20
 
 function Avion:init()
     -- propiedades iniciales
@@ -17,6 +17,10 @@ end
 function Avion:update(dt)
     -- calcular velocidad en y
     self.dy = self.dy + GRAVITY * dt
+    -- if input restar velocidad en y
+    if love.keyboard.wasPressed('space') then
+        self.dy = -5
+    end
     -- aplicar velocidad a y
     self.y = self.y + self.dy
 end
