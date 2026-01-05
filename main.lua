@@ -1,13 +1,15 @@
 -- https://github.com/Ulydev/push
 push = require "push"
-
+-- https://github.com/vrld/hump/blob/master/class.lua
+Class = require 'class'
+-- Importar Clase Avion
+require 'Avion'
 -- Definir Resolucion Ventana
 VENTANA_ANCHO = 1280
 VENTANA_ALTO  = 720
 -- Definir Resolucion Virtual
 VIRTUAL_ANCHO = 768
 VIRTUAL_ALTO  = 432
-
 -- Configuracion Parallax
 posicionFondo = 0
 posicionPiso = 0
@@ -15,6 +17,8 @@ VELOCIDAD_FONDO = 60
 VELOCIDAD_PISO  = 120
 LOOP_FONDO = 800
 LOOP_PISO  = 808
+-- Instanciar Avion
+local avion = Avion()
 
 function love.load()
     -- Configurar Filtro
@@ -58,5 +62,7 @@ function love.draw()
     love.graphics.draw(fondo, -posicionFondo, 0)
     -- Dibujar piso
     love.graphics.draw(piso,  -posicionPiso, VIRTUAL_ALTO - 36)
+    -- Dibujar avion
+    avion:render()
     push:finish()
 end
