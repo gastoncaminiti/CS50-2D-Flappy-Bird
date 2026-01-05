@@ -54,6 +54,8 @@ function love.update(dt)
     -- Calculo de posicion de fondo y piso
     posicionFondo = (posicionFondo + VELOCIDAD_FONDO * dt) % LOOP_FONDO
     posicionPiso  = (posicionPiso  +  VELOCIDAD_PISO * dt) % LOOP_PISO
+    -- Actualizar Avion
+    avion:update(dt)
 end
 
 function love.draw()

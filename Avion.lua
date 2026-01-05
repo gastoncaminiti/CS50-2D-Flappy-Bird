@@ -1,5 +1,7 @@
 Avion = Class{}
 
+local GRAVITY = 980
+
 function Avion:init()
     -- propiedades iniciales
     self.sprite = love.graphics.newImage('Sprites/avion.png')
@@ -8,6 +10,15 @@ function Avion:init()
     -- posicion inicial
     self.x = VIRTUAL_ANCHO / 2 - (self.ancho/ 2)
     self.y = VIRTUAL_ALTO / 2  -  (self.alto/ 2)
+    -- velocidad agregada en y
+    self.dy = 0
+end
+
+function Avion:update(dt)
+    -- calcular velocidad en y
+    self.dy = self.dy + GRAVITY * dt
+    -- aplicar velocidad a y
+    self.y = self.y + self.dy
 end
 
 function Avion:render()
