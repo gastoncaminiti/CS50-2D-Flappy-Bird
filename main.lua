@@ -4,6 +4,8 @@ push = require "push"
 Class = require 'class'
 -- Importar Clase Avion
 require 'Avion'
+-- Importar Clase Avion
+require 'Obstaculo'
 -- Definir Resolucion Ventana
 VENTANA_ANCHO = 1280
 VENTANA_ALTO  = 720
@@ -19,6 +21,10 @@ LOOP_FONDO = 800
 LOOP_PISO  = 808
 -- Instanciar Avion
 local avion = Avion()
+-- Tabla de Obstaculos
+local obstaculos = {}
+-- Timer
+local spawnTimer = 0
 
 function love.load()
     -- Configurar Filtro
@@ -67,8 +73,25 @@ function love.update(dt)
     -- Calculo de posicion de fondo y piso
     posicionFondo = (posicionFondo + VELOCIDAD_FONDO * dt) % LOOP_FONDO
     posicionPiso  = (posicionPiso  +  VELOCIDAD_PISO * dt) % LOOP_PISO
+    -- Incrementar timer
+    spawnTimer = spawnTimer + dt
+    -- Si pasaron 2 segundos
+    if spawnTimer > 2 then
+        -- Insertar nuevo objeto en la tabla
+        table.insert(obstaculos, Obstaculo())
+        spawnTimer = 0
+    end
     -- Actualizar Avion
     avion:update(dt)
+    -- Actualizar Obstaculos con For
+    for k, obstaculo in pairs(obstaculos) do
+        obstaculo:update(dt)
+        -- Si el obstaculo actual supero el limite izquierdo
+        if obstaculo.x < -obstaculo.ancho then
+            --  Eliminar objeto en la tabla con el iterador
+            table.remove(obstaculos, k)
+        end
+    end
     -- Reiniciar teclas presionadas en cada frame
     love.keyboard.keysPressed = {}
 end
@@ -77,6 +100,10 @@ function love.draw()
     push:start()
     -- Dibujar fondo
     love.graphics.draw(fondo, -posicionFondo, 0)
+    -- Dibujar obstaculos
+    for k, obstaculo in pairs(obstaculos) do
+        obstaculo:render()
+    end
     -- Dibujar piso
     love.graphics.draw(piso,  -posicionPiso, VIRTUAL_ALTO - 36)
     -- Dibujar avion
