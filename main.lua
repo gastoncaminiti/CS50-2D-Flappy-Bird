@@ -4,8 +4,10 @@ push = require "push"
 Class = require 'class'
 -- Importar Clase Avion
 require 'Avion'
--- Importar Clase Avion
+-- Importar Clase Obstaculo
 require 'Obstaculo'
+-- Importar Clase Par Obstaculos
+require 'ParObstaculos'
 -- Definir Resolucion Ventana
 VENTANA_ANCHO = 1280
 VENTANA_ALTO  = 720
@@ -25,6 +27,8 @@ local avion = Avion()
 local obstaculos = {}
 -- Timer
 local spawnTimer = 0
+-- Ultimo valor Y registrado para la ubicación de obstaculo
+local ultimoY = -OBSTACULO_ALTO + math.random(80) + 100
 
 function love.load()
     -- Configurar Filtro
@@ -77,8 +81,12 @@ function love.update(dt)
     spawnTimer = spawnTimer + dt
     -- Si pasaron 2 segundos
     if spawnTimer > 2 then
-        -- Insertar nuevo objeto en la tabla
-        table.insert(obstaculos, Obstaculo())
+        local y =   math.max(-OBSTACULO_ALTO + 10, 
+                    math.min(ultimoY + math.random(-20, 20),
+                    VIRTUAL_ALTO - 90 - OBSTACULO_ALTO))
+        ultimoY = y
+        -- Insertar nuevo para de obstaculos en la tabla
+        table.insert(obstaculos, ParObstaculos(y))
         spawnTimer = 0
     end
     -- Actualizar Avion
@@ -86,9 +94,10 @@ function love.update(dt)
     -- Actualizar Obstaculos con For
     for k, obstaculo in pairs(obstaculos) do
         obstaculo:update(dt)
-        -- Si el obstaculo actual supero el limite izquierdo
-        if obstaculo.x < -obstaculo.ancho then
-            --  Eliminar objeto en la tabla con el iterador
+    end
+    -- Eliminar Obstaculos
+    for k, obstaculo in pairs(obstaculos) do
+        if obstaculo.remove then
             table.remove(obstaculos, k)
         end
     end
