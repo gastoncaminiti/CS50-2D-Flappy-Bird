@@ -1,7 +1,7 @@
 Avion = Class{}
 
 local GRAVITY = 20
-
+local AABB_OFFSET = 54
 function Avion:init()
     -- propiedades iniciales
     self.sprite = love.graphics.newImage('Sprites/avion.png')
@@ -23,6 +23,15 @@ function Avion:update(dt)
     end
     -- aplicar velocidad a y
     self.y = self.y + self.dy
+end
+
+function Avion:colision(obstaculo)
+    if (self.x + 2) + (self.ancho - 4) >= obstaculo.x + AABB_OFFSET and self.x + 2 <= obstaculo.x + OBSTACULO_ANCHO - AABB_OFFSET then
+        if (self.y + 2) + (self.alto - 4) >= obstaculo.y and self.y + 2 <= obstaculo.y + OBSTACULO_ALTO then
+            return true
+        end
+    end
+    return false
 end
 
 function Avion:render()

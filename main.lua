@@ -29,6 +29,8 @@ local obstaculos = {}
 local spawnTimer = 0
 -- Ultimo valor Y registrado para la ubicación de obstaculo
 local ultimoY = -OBSTACULO_ALTO + math.random(80) + 100
+-- Propiedad para pausar el juego
+local jugando = true
 
 function love.load()
     -- Configurar Filtro
@@ -74,33 +76,42 @@ function love.keyboard.wasPressed(key)
 end
 
 function love.update(dt)
-    -- Calculo de posicion de fondo y piso
-    posicionFondo = (posicionFondo + VELOCIDAD_FONDO * dt) % LOOP_FONDO
-    posicionPiso  = (posicionPiso  +  VELOCIDAD_PISO * dt) % LOOP_PISO
-    -- Incrementar timer
-    spawnTimer = spawnTimer + dt
-    -- Si pasaron 2 segundos
-    if spawnTimer > 2 then
-        local y =   math.max(-OBSTACULO_ALTO + 10, 
-                    math.min(ultimoY + math.random(-20, 20),
-                    VIRTUAL_ALTO - 90 - OBSTACULO_ALTO))
-        ultimoY = y
-        -- Insertar nuevo para de obstaculos en la tabla
-        table.insert(obstaculos, ParObstaculos(y))
-        spawnTimer = 0
-    end
-    -- Actualizar Avion
-    avion:update(dt)
-    -- Actualizar Obstaculos con For
-    for k, obstaculo in pairs(obstaculos) do
-        obstaculo:update(dt)
-    end
-    -- Eliminar Obstaculos
-    for k, obstaculo in pairs(obstaculos) do
-        if obstaculo.remove then
-            table.remove(obstaculos, k)
+    if jugando then
+        -- Calculo de posicion de fondo y piso
+        posicionFondo = (posicionFondo + VELOCIDAD_FONDO * dt) % LOOP_FONDO
+        posicionPiso  = (posicionPiso  +  VELOCIDAD_PISO * dt) % LOOP_PISO
+        -- Incrementar timer
+        spawnTimer = spawnTimer + dt
+        -- Si pasaron 2 segundos
+        if spawnTimer > 2 then
+            local y =   math.max(-OBSTACULO_ALTO + 10, 
+                        math.min(ultimoY + math.random(-20, 20),
+                        VIRTUAL_ALTO - 90 - OBSTACULO_ALTO))
+            ultimoY = y
+            -- Insertar nuevo para de obstaculos en la tabla
+            table.insert(obstaculos, ParObstaculos(y))
+            spawnTimer = 0
         end
-    end
+        -- Actualizar Avion
+        avion:update(dt)
+        -- Actualizar Obstaculos con For
+        for k, obstaculo in pairs(obstaculos) do
+            obstaculo:update(dt)
+             -- verificar si el avion choca con alguna parte del obstaculo
+            for l, parte in pairs(obstaculo.par) do
+                if avion:colision(parte) then
+                    -- pausar el juego si choca con alguna parte
+                    jugando = false
+                end
+            end
+        end
+        -- Eliminar Obstaculos
+        for k, obstaculo in pairs(obstaculos) do
+            if obstaculo.remove then
+                table.remove(obstaculos, k)
+            end
+        end
+    end 
     -- Reiniciar teclas presionadas en cada frame
     love.keyboard.keysPressed = {}
 end

@@ -1,6 +1,6 @@
 ParObstaculos = Class{}
 
-local ESPACIO_OBSTACULOS = 90
+local ESPACIO_OBSTACULOS = 200
 
 function ParObstaculos:init(y)
     -- Coordenadas iniciales
