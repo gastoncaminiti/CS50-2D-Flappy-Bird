@@ -1,17 +1,18 @@
-Avion = Class{}
+Avion = Class {}
 
 local GRAVITY = 20
 local AABB_OFFSET = 54
+
 function Avion:init()
     -- propiedades iniciales
     self.sprite = love.graphics.newImage('Sprites/avion.png')
     self.ancho  = self.sprite:getWidth()
     self.alto   = self.sprite:getHeight()
     -- posicion inicial
-    self.x = VIRTUAL_ANCHO / 2 - (self.ancho/ 2)
-    self.y = VIRTUAL_ALTO / 2  -  (self.alto/ 2)
+    self.x      = VIRTUAL_ANCHO / 2 - (self.ancho / 2)
+    self.y      = VIRTUAL_ALTO / 2 - (self.alto / 2)
     -- velocidad agregada en y
-    self.dy = 0
+    self.dy     = 0
 end
 
 function Avion:update(dt)
