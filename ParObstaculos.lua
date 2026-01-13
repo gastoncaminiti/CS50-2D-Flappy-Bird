@@ -1,6 +1,6 @@
 ParObstaculos = Class{}
 
-local ESPACIO_OBSTACULOS = 200
+local ESPACIO_OBSTACULOS = 180
 
 function ParObstaculos:init(y)
     -- Coordenadas iniciales
@@ -14,6 +14,7 @@ function ParObstaculos:init(y)
     }
 
     self.remove = false
+    self.scored = false
 end
 
 function ParObstaculos:update(dt)

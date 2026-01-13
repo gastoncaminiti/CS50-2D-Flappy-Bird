@@ -1,6 +1,6 @@
 Avion = Class {}
 
-local GRAVITY = 20
+local GRAVITY = 15
 local AABB_OFFSET = 54
 
 function Avion:init()
@@ -20,7 +20,7 @@ function Avion:update(dt)
     self.dy = self.dy + GRAVITY * dt
     -- if input restar velocidad en y
     if love.keyboard.wasPressed('space') then
-        self.dy = -5
+        self.dy = -3
     end
     -- aplicar velocidad a y
     self.y = self.y + self.dy

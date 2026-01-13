@@ -9,6 +9,8 @@ function JugarEstado:init()
     self.timer = 0
     -- Ultimo valor Y registrado para la ubicación de obstaculo
     self.ultimoY = -OBSTACULO_ALTO + math.random(80) + 100
+    -- Acumular puntaje
+    self.puntaje = 0
 end
 
 function JugarEstado:update(dt)
@@ -26,6 +28,13 @@ function JugarEstado:update(dt)
     end
     -- Actualizar Obstaculos con For
     for k, obstaculo in pairs(self.obstaculos) do
+        if not obstaculo.scored then
+            -- Sumar puntaje si superamos obstaculo
+            if obstaculo.x + OBSTACULO_ANCHO < self.avion.x then
+                self.puntaje = self.puntaje + 1
+                obstaculo.scored = true
+            end
+        end
         obstaculo:update(dt)
     end
     -- Eliminar Obstaculos
@@ -36,13 +45,21 @@ function JugarEstado:update(dt)
     end
     -- Actualizar Avion
     self.avion:update(dt)
-     -- simple collision between bird and all pipes in pairs
+    -- Determinar colision entre partes de cada obstaculo y avion
     for k, obstaculo in pairs(self.obstaculos) do
         for l, parte in pairs(obstaculo.par) do
             if self.avion:colision(parte) then
-                MaquinaEstadoGlobal:cambiar('titulo')
+                MaquinaEstadoGlobal:cambiar('puntaje', {
+                    score = self.puntaje
+                })
             end
         end
+    end
+    -- Reiniciar si tocamos el piso
+    if self.avion.y > VENTANA_ALTO - 15 then
+        MaquinaEstadoGlobal:cambiar('puntaje', {
+            score = self.puntaje
+        })
     end
 end
 

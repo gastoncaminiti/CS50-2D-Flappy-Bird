@@ -16,6 +16,8 @@ require 'Estados.BaseEstado'
 require 'Estados.JugarEstado'
 -- Importar Clase TituloEstado Estado
 require 'Estados.TituloEstado'
+-- Importar Clase PuntajeEstado Estado
+require 'Estados.PuntajeEstado'
 -- Definir Resolucion Ventana
 VENTANA_ANCHO       = 1280
 VENTANA_ALTO        = 720
@@ -59,6 +61,7 @@ function love.load()
     MaquinaEstadoGlobal = MaquinaEstado {
         ['titulo'] = function() return TituloEstado() end,
         ['jugar']  = function() return JugarEstado() end,
+        ['puntaje'] = function() return PuntajeEstado() end
     }
     -- Configurar Estado Inicial
     MaquinaEstadoGlobal:cambiar('titulo')
