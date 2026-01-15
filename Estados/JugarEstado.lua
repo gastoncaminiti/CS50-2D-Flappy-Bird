@@ -33,6 +33,7 @@ function JugarEstado:update(dt)
             if obstaculo.x + OBSTACULO_ANCHO < self.avion.x then
                 self.puntaje = self.puntaje + 1
                 obstaculo.scored = true
+                sonidos['puntaje']:play()
             end
         end
         obstaculo:update(dt)
@@ -49,6 +50,8 @@ function JugarEstado:update(dt)
     for k, obstaculo in pairs(self.obstaculos) do
         for l, parte in pairs(obstaculo.par) do
             if self.avion:colision(parte) then
+                sonidos['explosion']:play()
+                sonidos['herir']:play()
                 MaquinaEstadoGlobal:cambiar('puntaje', {
                     score = self.puntaje
                 })
@@ -57,6 +60,8 @@ function JugarEstado:update(dt)
     end
     -- Reiniciar si tocamos el piso
     if self.avion.y > VENTANA_ALTO - 15 then
+        sonidos['explosion']:play()
+        sonidos['herir']:play()
         MaquinaEstadoGlobal:cambiar('puntaje', {
             score = self.puntaje
         })
@@ -73,4 +78,12 @@ function JugarEstado:render()
     love.graphics.print('Score: ' .. tostring(self.puntaje), 8, 8)
     -- Dibujar avion
     self.avion:render()
+end
+
+function JugarEstado:enter()
+    jugando = true
+end
+
+function JugarEstado:exit()
+    jugando = false
 end

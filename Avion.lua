@@ -21,6 +21,7 @@ function Avion:update(dt)
     -- if input restar velocidad en y
     if love.keyboard.wasPressed('space') then
         self.dy = -3
+        sonidos['saltar']:play()
     end
     -- aplicar velocidad a y
     self.y = self.y + self.dy

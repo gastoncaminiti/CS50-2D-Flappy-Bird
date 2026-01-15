@@ -10,7 +10,7 @@ require 'Obstaculo'
 require 'ParObstaculos'
 -- Importar Clase MaquinaEstado
 require 'MaquinaEstado'
--- Importar Clase BaseEstado 
+-- Importar Clase BaseEstado
 require 'Estados.BaseEstado'
 -- Importar Clase JugarEstado
 require 'Estados.JugarEstado'
@@ -37,17 +37,30 @@ local posicionFondo = 0
 local piso          = love.graphics.newImage('Sprites/piso.png')
 local posicionPiso  = 0
 
+jugando             = false
+
 function love.load()
     -- Configurar Filtro
     love.graphics.setDefaultFilter('linear', 'linear')
     -- Titulo de Ventana
     love.window.setTitle('Tappy Avion')
-    -- configurar fuentes
+    -- Configurar fuentes
     smallFont = love.graphics.newFont('Fonts/font.ttf', 8)
     mediumFont = love.graphics.newFont('Fonts/flappy.ttf', 14)
     flappyFont = love.graphics.newFont('Fonts/flappy.ttf', 28)
     hugeFont = love.graphics.newFont('Fonts/flappy.ttf', 56)
     love.graphics.setFont(flappyFont)
+    -- Configurar Sonidos
+    sonidos = {
+        ['saltar'] = love.audio.newSource('Sonidos/salto.wav', 'static'),
+        ['explosion'] = love.audio.newSource('Sonidos/explosion.wav', 'static'),
+        ['herir'] = love.audio.newSource('Sonidos/herido.wav', 'static'),
+        ['puntaje'] = love.audio.newSource('Sonidos/puntaje.wav', 'static'),
+        ['musica'] = love.audio.newSource('Sonidos/musica.mp3', 'static')
+    }
+    -- Configurar Musica
+    sonidos['musica']:setLooping(true)
+    sonidos['musica']:play()
     -- Configurar Ventana
     push:setupScreen(
         VIRTUAL_ANCHO,
@@ -60,9 +73,9 @@ function love.load()
         })
     -- Maquina de Estado de Acceso Global
     MaquinaEstadoGlobal = MaquinaEstado {
-        ['titulo'] = function() return TituloEstado() end,
-        ['jugar']  = function() return JugarEstado() end,
-        ['puntaje'] = function() return PuntajeEstado() end,
+        ['titulo']   = function() return TituloEstado() end,
+        ['jugar']    = function() return JugarEstado() end,
+        ['puntaje']  = function() return PuntajeEstado() end,
         ['contador'] = function() return ContadorEstado() end
     }
     -- Configurar Estado Inicial
@@ -94,9 +107,12 @@ function love.keyboard.wasPressed(key)
 end
 
 function love.update(dt)
-    -- Calculo de posicion de fondo y piso
-    posicionFondo = (posicionFondo + VELOCIDAD_FONDO * dt) % LOOP_FONDO
-    posicionPiso  = (posicionPiso + VELOCIDAD_PISO * dt) % LOOP_PISO
+    if jugando then
+        -- Calculo de posicion de fondo y piso
+        posicionFondo = (posicionFondo + VELOCIDAD_FONDO * dt) % LOOP_FONDO
+        posicionPiso  = (posicionPiso + VELOCIDAD_PISO * dt) % LOOP_PISO
+    end
+
     -- Actualizar estado actual
     MaquinaEstadoGlobal:update(dt)
     -- Reiniciar teclas presionadas en cada frame
