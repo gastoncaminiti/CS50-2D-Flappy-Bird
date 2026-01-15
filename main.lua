@@ -8,16 +8,18 @@ require 'Avion'
 require 'Obstaculo'
 -- Importar Clase Par Obstaculos
 require 'ParObstaculos'
--- Importar Clase Maquina Estado
+-- Importar Clase MaquinaEstado
 require 'MaquinaEstado'
--- Importar Clase BaseEstado Estado
+-- Importar Clase BaseEstado 
 require 'Estados.BaseEstado'
--- Importar Clase JugarEstado Estado
+-- Importar Clase JugarEstado
 require 'Estados.JugarEstado'
--- Importar Clase TituloEstado Estado
+-- Importar Clase TituloEstado
 require 'Estados.TituloEstado'
--- Importar Clase PuntajeEstado Estado
+-- Importar Clase PuntajeEstado
 require 'Estados.PuntajeEstado'
+-- Importar Clase ContadorEstado
+require 'Estados.ContadorEstado'
 -- Definir Resolucion Ventana
 VENTANA_ANCHO       = 1280
 VENTANA_ALTO        = 720
@@ -40,7 +42,7 @@ function love.load()
     love.graphics.setDefaultFilter('linear', 'linear')
     -- Titulo de Ventana
     love.window.setTitle('Tappy Avion')
-     -- configurar fuentes
+    -- configurar fuentes
     smallFont = love.graphics.newFont('Fonts/font.ttf', 8)
     mediumFont = love.graphics.newFont('Fonts/flappy.ttf', 14)
     flappyFont = love.graphics.newFont('Fonts/flappy.ttf', 28)
@@ -56,12 +58,12 @@ function love.load()
             resizable = true,
             vsync = true
         })
-
     -- Maquina de Estado de Acceso Global
     MaquinaEstadoGlobal = MaquinaEstado {
         ['titulo'] = function() return TituloEstado() end,
         ['jugar']  = function() return JugarEstado() end,
-        ['puntaje'] = function() return PuntajeEstado() end
+        ['puntaje'] = function() return PuntajeEstado() end,
+        ['contador'] = function() return ContadorEstado() end
     }
     -- Configurar Estado Inicial
     MaquinaEstadoGlobal:cambiar('titulo')

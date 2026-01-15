@@ -2,7 +2,7 @@ TituloEstado = Class { __includes = BaseEstado }
 
 function TituloEstado:update(dt)
     if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
-        MaquinaEstadoGlobal:cambiar('jugar')
+        MaquinaEstadoGlobal:cambiar('contador')
     end
 end
 

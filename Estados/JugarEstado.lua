@@ -68,6 +68,9 @@ function JugarEstado:render()
     for k, obstaculo in pairs(self.obstaculos) do
         obstaculo:render()
     end
+    -- Dibujar puntaje
+    love.graphics.setFont(flappyFont)
+    love.graphics.print('Score: ' .. tostring(self.puntaje), 8, 8)
     -- Dibujar avion
     self.avion:render()
 end
