@@ -7,7 +7,7 @@ end
 function PuntajeEstado:update(dt)
     -- Cambiar a estado jugar
     if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
-        MaquinaEstadoGlobal:cambiar('jugar')
+        MaquinaEstadoGlobal:cambiar('contador')
     end
 end
 
