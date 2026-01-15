@@ -82,6 +82,8 @@ function love.load()
     MaquinaEstadoGlobal:cambiar('titulo')
     -- Tabla de teclas presionadas
     love.keyboard.keysPressed = {}
+    -- Tabla de botones del mouse presionados
+    love.mouse.buttonsPressed = {}
 end
 
 function love.resize(w, h)
@@ -96,7 +98,6 @@ function love.keypressed(key)
         love.event.quit()
     end
 end
-
 -- Funcion para determinar si una tecla esta presionada
 function love.keyboard.wasPressed(key)
     if love.keyboard.keysPressed[key] then
@@ -104,6 +105,14 @@ function love.keyboard.wasPressed(key)
     else
         return false
     end
+end
+-- Callback de LÖVE2D para determinar el empleo del mouse
+function love.mousepressed(x, y, button)
+    love.mouse.buttonsPressed[button] = true
+end
+-- Funcion para determinar si una tecla del mouse fue presionada
+function love.mouse.wasPressed(button)
+    return love.mouse.buttonsPressed[button]
 end
 
 function love.update(dt)
@@ -117,6 +126,7 @@ function love.update(dt)
     MaquinaEstadoGlobal:update(dt)
     -- Reiniciar teclas presionadas en cada frame
     love.keyboard.keysPressed = {}
+    love.mouse.buttonsPressed = {}
 end
 
 function love.draw()

@@ -19,7 +19,7 @@ function Avion:update(dt)
     -- calcular velocidad en y
     self.dy = self.dy + GRAVITY * dt
     -- if input restar velocidad en y
-    if love.keyboard.wasPressed('space') then
+    if love.keyboard.wasPressed('space') or love.mouse.wasPressed(1) then
         self.dy = -3
         sonidos['saltar']:play()
     end
